@@ -1,18 +1,14 @@
 package pageObjects;
 
 import java.util.HashMap;
-
-import gherkin.lexer.Th;
 import org.openqa.selenium.By;
-
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import reusableComponents.DB_Operations;
 import testBase.DriverFactory;
 import testBase.TestBase;
 
 public class UsersPageObjects extends TestBase{
-	
+
 	By btn_addUser = By.xpath("//button[normalize-space()='Add User']");
 	By chk_Active = By.xpath("//*[@id=\"users_active\"]");
 	By chk_Element_Active = By.xpath("//*[@id=\"uniform-users_active\"]");
@@ -27,8 +23,14 @@ public class UsersPageObjects extends TestBase{
 	By field_Search = By.xpath("//*[@id=\"search_menu\"]");
 	By txt_Search = By.xpath("//input[@id='search_keywords']");
 	By btn_Search = By.xpath("//input[@value='Search']");
+
 	DB_Operations dbOps = new DB_Operations();
 	int totalCount;
+
+	/**
+	 * @param testData
+	 * @throws Throwable
+	 */
 	public void createUser(HashMap<String, String> testData) throws Throwable {
 		String queryTotal = "SELECT COUNT(*) as total FROM `users`";
 		HashMap<String, String> dbData = dbOps.getSqlResultInMap(queryTotal);
@@ -54,6 +56,9 @@ public class UsersPageObjects extends TestBase{
 		click_custom(DriverFactory.getInstance().getDriver().findElement(btn_Save), "NewUserCreated");
     }
 
+	/**
+	 * @throws Throwable
+	 */
     public void clickButtonAddUser() throws Throwable {
 		String queryTotal = "SELECT COUNT(*) as total FROM `users`";
 		HashMap<String, String> dbData = dbOps.getSqlResultInMap(queryTotal);
@@ -62,20 +67,43 @@ public class UsersPageObjects extends TestBase{
 		Thread.sleep(300);
 	}
 
+	/**
+	 * @param active
+	 * @throws Throwable
+	 */
 	public void checkActive(int active) throws Throwable {
 		selectedCheckbox_custom(DriverFactory.getInstance().getDriver().findElement(chk_Active), DriverFactory.getInstance().getDriver().findElement(chk_Element_Active),"Active", active);
 		Thread.sleep(300);
     }
+
+	/**
+	 * @param group
+	 * @param language
+	 * @throws Throwable
+	 */
 	public void selectDropdown(String group, String language) throws Throwable{
 		selectDropDownByVisibleText_custom(DriverFactory.getInstance().getDriver().findElement(dd_group), "Add Group", group);
 		Thread.sleep(300);
 		selectDropDownByVisibleText_custom(DriverFactory.getInstance().getDriver().findElement(dd_language), "Add Language", language);
 		Thread.sleep(300);
     }
+
+	/**
+	 * @param url
+	 * @throws Throwable
+	 */
 	public void uploadFile(String url) throws Throwable {
 		uploadFile_custom(DriverFactory.getInstance().getDriver().findElement(btn_UserPhoto), "Add Photo", url);
 		Thread.sleep(300);
     }
+
+	/**
+	 * @param fullname
+	 * @param email
+	 * @param password
+	 * @param phone
+	 * @throws Throwable
+	 */
 	public void addInfomation(String fullname,String email,String password,String phone) throws Throwable{
 		sendKeys_custom(DriverFactory.getInstance().getDriver().findElement(txt_FullName), "Add FullName", fullname);
 		Thread.sleep(300);
@@ -87,10 +115,18 @@ public class UsersPageObjects extends TestBase{
 		Thread.sleep(300);
     }
 
+	/**
+	 * @throws Throwable
+	 */
 	public void addUser() throws Throwable{
 		click_custom(DriverFactory.getInstance().getDriver().findElement(btn_Save), "NewUserCreated");
 	}
 
+	/**
+	 * @param name
+	 * @param email
+	 * @throws Throwable
+	 */
 	public void Search_Verify_UserCreationOnUI(String name, String email) throws Throwable {
 		moveToElement_custom(DriverFactory.getInstance().getDriver().findElement(field_Search), "TaskSearchOption");
 		Thread.sleep(300);
@@ -101,6 +137,9 @@ public class UsersPageObjects extends TestBase{
 		findUserInTable(email);
 	}
 
+	/**
+	 * @param email
+	 */
 	private void findUserInTable(String email) {
 		try {
 			int i = 1;
@@ -123,6 +162,11 @@ public class UsersPageObjects extends TestBase{
 		}
 	}
 
+	/**
+	 * @param emailUser
+	 * @param created
+	 * @throws Throwable
+	 */
 	public void checkUserInDatabase(String emailUser, boolean created) throws Throwable{
 		String queryEmail = "SELECT * FROM `users` where email = '"+emailUser+"'";
 		HashMap<String, String> dbData = dbOps.getSqlResultInMap(queryEmail);

@@ -3,7 +3,7 @@ import org.openqa.selenium.WebDriver;
 public interface DriverManagerObject {
     WebDriver getDriverManager(WebDriver driverManager);
 }
-class   Chorme implements DriverManagerObject {
+class Chorme implements DriverManagerObject {
     @Override
     public WebDriver getDriverManager(WebDriver driverManager) {
         return driverManager;

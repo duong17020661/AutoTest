@@ -1,8 +1,3 @@
-/**
- * Author: Prakash Narkhede
- * Blog: www.AutomationTalks.com
- * LinkedIn: https://www.linkedin.com/in/panarkhede89/
- */
 package testBase;
 
 import org.openqa.selenium.WebDriver;

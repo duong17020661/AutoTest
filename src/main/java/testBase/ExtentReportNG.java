@@ -13,6 +13,10 @@ public class ExtentReportNG {
 	
 	static ExtentReports extent;
 
+	/**
+	 * @return
+	 * @throws Exception
+	 */
 	public static ExtentReports setupExtentReport() throws Exception {
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH-mm-ss");
 		Date date = new Date();

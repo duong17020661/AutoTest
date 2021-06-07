@@ -22,50 +22,52 @@ public class JiraOperations {
 	String jiraUserName = PropertiesOperations.getPropertyValueByKey("jiraUserName");
 	String jiraAccessKey = PropertiesOperations.getPropertyValueByKey("jiraSecretKey");
 
-
-	//create Jira Issue as bug
+	/**
+	 * @param ProjectName
+	 * @param issueSummary
+	 * @param issueDescription
+	 * @param label
+	 * @param assignee
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 * @throws ParseException
+	 */
 	public String createJiraIssue(String ProjectName, String issueSummary, String issueDescription, String label, String assignee) throws ClientProtocolException, IOException, ParseException {
-<<<<<<< HEAD
-
-=======
 		
->>>>>>> 21fbe2ae0a9c0d6103b884be7203e210639c6c46
-		String issueId = null; //to store issue / bug id.
-
+		String issueId = null;
 		HttpClient httpClient = HttpClientBuilder.create().build();
 		String url = jiraURL+"/rest/api/3/issue";
 		HttpPost postRequest = new HttpPost(url);
-		postRequest.addHeader("content-type", "application/json");
+		postRequest.addHeader("Content-Type", "application/json");
 
-		//	BASE64Encoder base=new BASE64Encoder();
 		String encoding = Base64.getEncoder().encodeToString((jiraUserName+":"+jiraAccessKey).getBytes());
-		//String encoding = base.encode((jiraUserName+":"+jiraAccessKey).getBytes());
 		postRequest.setHeader("Authorization", "Basic " + encoding);
 
-<<<<<<< HEAD
-		StringEntity params = new StringEntity(createPayloadForCreateJiraIssue(ProjectName, issueSummary, issueDescription, priority, label, assignee));
-=======
 		StringEntity params = new StringEntity(createPayloadForCreateJiraIssue(ProjectName, issueSummary, issueDescription, label, assignee));
 		params.setContentType("application/json");
->>>>>>> 21fbe2ae0a9c0d6103b884be7203e210639c6c46
 		postRequest.setEntity(params);
 		HttpResponse response = httpClient.execute(postRequest);
 
-		//convert httpresponse to string
+		// Chuyển dữ liệu trả về sang dạng String
 		String jsonString = EntityUtils.toString(response.getEntity());
 
-		//convert sring to Json
-		JSONParser parser = new JSONParser();
+		// Chuyển String sang JSON
+		JSONParser parser = new JSONParser();  
 		JSONObject json = (JSONObject) parser.parse(jsonString);
 
-		//extract issuekey from Json
+		// Lấy ID của Issue
 		issueId = (String) json.get("key");
-
 		return issueId;
 
 	}
 
-	//Add attachment to already created bug / issue in JIRA
+	/**
+	 * @param issueId
+	 * @param filePath
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
 	public void addAttachmentToJiraIssue(String issueId, String filePath) throws ClientProtocolException, IOException
 	{
 		String pathname= filePath;
@@ -75,8 +77,6 @@ public class JiraOperations {
 		String url = jiraURL+"/rest/api/3/issue/"+issueId+"/attachments";
 		HttpPost postRequest = new HttpPost(url);
 
-		//BASE64Encoder base=new BASE64Encoder();
-		//String encoding = base.encode((jiraUserName+":"+jiraAccessKey).getBytes());
 		String encoding = Base64.getEncoder().encodeToString((jiraUserName+":"+jiraAccessKey).getBytes());
 
 		postRequest.setHeader("Authorization", "Basic " + encoding);
@@ -89,58 +89,21 @@ public class JiraOperations {
 		System.out.println(response.getStatusLine());
 
 		if(response.getStatusLine().toString().contains("200 OK")){
-			System.out.println("Attachment uploaded");
+			System.out.println("Đã tải tệp đính kèm");
 		} else{
-			System.out.println("Attachment not uploaded");
+			System.out.println("Không thể tải tệp đính kèm");
 		}
 	}
 
-	//creates payload for create issue post request
+	/**
+	 * @param ProjectName
+	 * @param issueSummary
+	 * @param issueDescription
+	 * @param label
+	 * @param assigneeId
+	 * @return
+	 */
 	private static String createPayloadForCreateJiraIssue(String ProjectName, String issueSummary, String issueDescription, String label, String assigneeId) {
-<<<<<<< HEAD
-		return "{\r\n" +
-				"    \"fields\": {\r\n" +
-				"       \"project\":\r\n" +
-				"       {\r\n" +
-				"          \"key\": \""+ProjectName+"\"\r\n" +
-				"       },\r\n" +
-				"       \"summary\": \""+issueSummary+"\",\r\n" +
-				"	   \"description\": {\r\n" +
-				"          \"type\": \"doc\",\r\n" +
-				"          \"version\": 1,\r\n" +
-				"          \"content\": [\r\n" +
-				"				{\r\n" +
-				"                    \"type\": \"paragraph\",\r\n" +
-				"                    \"content\": [\r\n" +
-				"								{\r\n" +
-				"                                    \"text\": \""+issueDescription+"\",\r\n" +
-				"                                    \"type\": \"text\"\r\n" +
-				"								}\r\n" +
-				"							   ]\r\n" +
-				"				}\r\n" +
-				"					]\r\n" +
-				"						}, \r\n" +
-				"		\"issuetype\": {\r\n" +
-				"          \"name\": \"Bug\"\r\n" +
-				"       },\r\n" +
-				"        \"labels\": [\r\n" +
-				"      \""+label+"\"\r\n" +
-				"    ],\r\n" +
-				"    	\"environment\": {\r\n" +
-				"      \"type\": \"doc\",\r\n" +
-				"      \"version\": 1,\r\n" +
-				"      \"content\": [\r\n" +
-				"        {\r\n" +
-				"          \"type\": \"paragraph\",\r\n" +
-				"          \"content\": []\r\n" +
-				"        }\r\n" +
-				"      ]\r\n" +
-				"    },\r\n" +
-				"    	\"assignee\": {\r\n" +
-				"      \"id\": \""+assigneeId+"\"\r\n" +
-				"    }\r\n" +
-				"}\r\n" +
-=======
 		return "{\n" +
 				"\"fields\": {\n" +
 				"    \"summary\": \"" + ProjectName + ": " + issueSummary+ "\",\n" +
@@ -176,9 +139,8 @@ public class JiraOperations {
 				"      \"id\": \""+assigneeId+"\"\n" +
 				"    }\n" +
 				"  }\n" +
->>>>>>> 21fbe2ae0a9c0d6103b884be7203e210639c6c46
 				"}";
 	}
-
-
 }
+
+

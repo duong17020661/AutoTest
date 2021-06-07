@@ -23,74 +23,64 @@ import testBase.ExtentFactory;
 import testBase.ExtentReportNG;
 import testBase.TestBase;
 
-/**
- * @author: Prakash Narkhede
- * @Youtube: https://www.youtube.com/automationtalks
- * @LinkedIn: https://www.linkedin.com/in/panarkhede89/
- */
 public class ListenersImplementation implements ITestListener{
 	JiraOperations jiraOps = new JiraOperations();
 	TestBase testBase = new TestBase();
 	static ExtentReports report;
-	ExtentTest test;
+		   ExtentTest test;
 
+	/**
+	 * @param result
+	 */
 	public void onTestStart(ITestResult result) {
-//		try {
-//			testBase.LaunchApplication();
-//		}
-//		catch (Exception e){
-//
-//		}
-//		finally {
-			test = report.createTest(result.getMethod().getMethodName());
-			ExtentFactory.getInstance().setExtent(test);
-//		}
+		test = report.createTest(result.getMethod().getMethodName());
+		ExtentFactory.getInstance().setExtent(test);
 	}
 
+	/**
+	 * @param result
+	 */
 	public void onTestSuccess(ITestResult result) {
-		ExtentFactory.getInstance().getExtent().log(Status.PASS, "Test Case: "+result.getMethod().getMethodName()+ " is Passed.");
+		ExtentFactory.getInstance().getExtent().log(Status.PASS, "Ca kiểm thử: "+result.getMethod().getMethodName()+ " thành công.");
 		ExtentFactory.getInstance().removeExtentObject();
 		testBase.tearDown();
 	}
 
+	/**
+	 * @param result
+	 */
 	public void onTestFailure(ITestResult result) {
-		ExtentFactory.getInstance().getExtent().log(Status.FAIL, "Test Case: "+result.getMethod().getMethodName()+ " is Failed.");
+		ExtentFactory.getInstance().getExtent().log(Status.FAIL, "Ca kiểm thử: "+result.getMethod().getMethodName()+ " thất bại.");
 		ExtentFactory.getInstance().getExtent().log(Status.FAIL, result.getThrowable());
-
-		//add screenshot for failed test.
+		// Chụp ảnh màn hình kiểm thử thất bại
 		File src = ((TakesScreenshot)DriverFactory.getInstance().getDriver()).getScreenshotAs(OutputType.FILE);
 		SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyy HH-mm-ss");
 		Date date = new Date();
 		String actualDate = format.format(date);
-
 		String screenshotPath = System.getProperty("user.dir")+
 				"/Reports/Screenshots/"+actualDate+".jpeg";
 		File dest = new File(screenshotPath);
-
+		
 		try {
 			FileUtils.copyFile(src, dest);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			ExtentFactory.getInstance().getExtent().addScreenCaptureFromPath(screenshotPath, "Test case failure screenshot");
+			ExtentFactory.getInstance().getExtent().addScreenCaptureFromPath(screenshotPath, "Hình ảnh vị trí kiểm thử thất bại");
 			ExtentFactory.getInstance().removeExtentObject();
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		///////JIRA defect creation part
+		// Kiểm tra xem có tự động tạo issue khi kiểm thử thất bại hay không
 		String automaticJIRAcreation = PropertiesOperations.getPropertyValueByKey("automatic_Issue_Creation_In_JIRA");
 		if(automaticJIRAcreation.trim().equalsIgnoreCase("ON")) {
-			String issueS = "Automation Test Failed - "+result.getMethod().getMethodName();
-			String issueD = "Test Data to be passed here.";
+			String issueS = "Kiểm thử thất bại - "+result.getMethod().getMethodName();
+			String issueD = "Kiểm thử thành công.";
 			String issueNumber = null;
 			try {
-<<<<<<< HEAD
-				issueNumber = jiraOps.createJiraIssue("AutomationTest", issueS, issueD, "AUT", "606a7a842b469c00701afd8d");
-=======
 				issueNumber = jiraOps.createJiraIssue("AutoTest", issueS, issueD, "AUT", "606a7a842b469c00701afd8d");
->>>>>>> 21fbe2ae0a9c0d6103b884be7203e210639c6c46
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -103,8 +93,11 @@ public class ListenersImplementation implements ITestListener{
 		testBase.tearDown();
 	}
 
+	/**
+	 * @param result
+	 */
 	public void onTestSkipped(ITestResult result) {
-		ExtentFactory.getInstance().getExtent().log(Status.SKIP, "Test Case: "+result.getMethod().getMethodName()+ " is skipped.");
+		ExtentFactory.getInstance().getExtent().log(Status.SKIP, "Ca kiểm thử: "+result.getMethod().getMethodName()+ " bị bỏ qua.");
 		ExtentFactory.getInstance().removeExtentObject();
 	}
 
@@ -114,16 +107,21 @@ public class ListenersImplementation implements ITestListener{
 	public void onTestFailedWithTimeout(ITestResult result) {
 	}
 
+	/**
+	 * @param context
+	 */
 	public void onStart(ITestContext context) {
 		try {
-			report = ExtentReportNG.setupExtentReport();
+			 report = ExtentReportNG.setupExtentReport();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * @param context
+	 */
 	public void onFinish(ITestContext context) {
-		//close extent
 		report.flush();
 	}
 

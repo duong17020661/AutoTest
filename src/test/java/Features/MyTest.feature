@@ -16,7 +16,7 @@ Feature: Create user test
 
         Examples:
             | active | group | language | url | fullname | email | password | phone |
-            | checked | Client | English | C:\Users\Admin\Downloads\favicon.png | Duong | duogn@abc.com | 1111111 | 1111123 |
+            | checked | Client | English | C:\Users\Admin\Downloads\favicon.png | Duong | duong12@bca.com | 1111111 | 1111123 |
 
     Scenario Outline: Create user
         When user check user active: <active>
@@ -28,4 +28,4 @@ Feature: Create user test
 
         Examples:
             | active | group | language | url | fullname | email | password | phone |
-            | checked | Client | English | C:\Users\Admin\Downloads\favicon.png | Duong | duogn@abc.com | 1111111 | 1111123 |
+            | checked | Client | English | C:\Users\Admin\Downloads\favicon.png | Duong | duong12@bca.com | 1111111 | 1111123 |

@@ -20,13 +20,16 @@ public class TestCase extends TestBase {
 	public void UserCreationTest(Object obj1) throws Throwable {
 		HashMap<String, String> testData = (HashMap<String, String>) obj1;
 		ExtentFactory.getInstance().getExtent().info("Dữ liệu người dùng: "+ testData);
-
 		loginPage.login("admin@localhost.com", "11111111");
 		userPage.createUser(testData);
-		userPage.Search_Verify_UserCreationOnUI(testData.get("Fullname"),testData.get("Email"));
+		userPage.Search_Verify_UserCreationOnUI(testData.get("FullName"),testData.get("Email"));
 		userPage.checkUserInDatabase(testData.get("Email"), true);
 	}
 
+	/**
+	 * @return
+	 * @throws Exception
+	 */
 	@DataProvider (name = "taskCreationData")
 	public Object[][] testDataSupplier() throws Exception {
 		Object[][] obj = new Object[excel.getRowCount()][1];
