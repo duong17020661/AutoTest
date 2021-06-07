@@ -14,11 +14,11 @@
 		<classes>
 			<class name="Tests.TestCase" />
 		</classes>
-	</test> <!-- Test -->
+	</test>
 	<test name="Failed Test">
 		<classes>
 			<class name="Tests.Runner" />
 		</classes>
-	</test> <!-- Test -->
+	</test> 
 
 </suite> <!-- Suite -->
